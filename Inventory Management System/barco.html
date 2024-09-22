@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+</head>
+<body>
+    <h1>Inventory Management System</h1>
+    <label for="barcodeInput">Scan Barcode:</label>
+    <input type="text" id="barcodeInput" oninput="handleBarcodeInput(this.value)">
+    <div id="barcodeResult"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+    <script>
+        // Initialize QuaggaJS
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#barcodeInput')
+            },
+            decoder: {
+                readers: ['ean_reader'] // Change to appropriate barcode type if needed
+            }
+        }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+
+        // Handle barcode input
+        function handleBarcodeInput(barcode) {
+            document.getElementById('barcodeResult').innerText = 'Scanned Barcode: ' + barcode;
+            // Perform further processing such as adding the item to inventory, fetching item details, etc.
+            // You can make AJAX requests to a server to handle backend operations.
+        }
+    </script>
+</body>
+</html>

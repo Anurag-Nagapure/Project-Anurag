@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+    <video id="qr-video" width="100%" height="auto" style="border: 1px solid #ccc;"></video>
+    <div id="qr-result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.23.2"></script>
+    <script>
+        const codeReader = new ZXing.BrowserQRCodeReader();
+
+        codeReader
+            .getVideoInputDevices()
+            .then((videoInputDevices) => {
+                // Use the first available video input device
+                const selectedDeviceId = videoInputDevices[0].deviceId;
+                codeReader.decodeFromVideoDevice(selectedDeviceId, 'qr-video', (result, err) => {
+                    if (result) {
+                        console.log(result);
+                        document.getElementById('qr-result').textContent = result.text;
+                        // Perform further processing such as navigating to a URL, fetching data, etc.
+                    }
+                    if (err && !(err instanceof ZXing.NotFoundException)) {
+                        console.error(err);
+                        document.getElementById('qr-result').textContent = 'No QR code found. Please try again.';
+                    }
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    </script>
+</body>
+</html>
